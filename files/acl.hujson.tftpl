@@ -1,0 +1,29 @@
+{
+    "groups": {
+        "group:admin": [ %{~ for admin in admins ~} "${admin}@${domain}", %{~ endfor ~} ]
+    },
+    "acls": [
+        { "action": "accept", "users": ["*"], "ports": ["*:*"] }
+    ],
+    "tagOwners": {
+        "${tag}": ["group:admin", "${tag}"]
+    },
+    "autoApprovers": {
+        "routes": {
+            %{~ for route in routes ~}
+            "${route}": ["group:admin", "${tag}"],
+            %{~ endfor ~}
+        },
+        "exitNode": ["${tag}"]
+    },
+    %{~ if enable_ssh ~}
+    "ssh": [
+        {
+            "action": "check",
+            "src": ["autogroup:members"],
+            "dst": ["autogroup:self"],
+            "users": ["autogroup:nonroot", "root"]
+        }
+    ]
+    %{~ endif ~}
+}
