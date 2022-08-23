@@ -11,7 +11,7 @@
     "autoApprovers": {
         "routes": {
             %{~ for route in routes ~}
-            "${route}": ["group:admin", "${tag}"],
+            "${route}": ["${tag}"],
             %{~ endfor ~}
         },
         "exitNode": ["${tag}"]

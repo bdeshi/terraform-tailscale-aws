@@ -19,6 +19,7 @@ resource "aws_instance" "tailscale" {
   user_data = templatefile("${path.module}/files/relay-init.sh.tftpl", {
     routes   = local.tailscale_routes
     auth_key = tailscale_tailnet_key.relay_auth.key
+    exit_node = var.advertise_exit_node
   })
   tags = {
     Name = "tailscale"

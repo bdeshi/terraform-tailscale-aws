@@ -66,9 +66,9 @@ variable "additional_routes" {
   default     = []
   description = "The routes in addition to selected VPC's routes, to add to the tailscale network."
   validation {
-    condition = length(var.additional_routes) == 0 ? true : alltrue([
+    condition = alltrue([
       for route in var.additional_routes :
-      regex("^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}/\\d{1,2}$", route)
+      can(regex("^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}/\\d{1,2}$", route))
     ])
     error_message = "routes must be in CIDR format."
   }
@@ -93,9 +93,15 @@ variable "advertise_routes" {
   description = "Whether to advertise the tailscale server's subnet routes to clients."
 }
 
-variable "enable_tailscale_ssh" {
+variable "advertise_exit_node" {
   type        = bool
   default     = true
+  description = "Whether to advertise the tailscale server as an exit node."
+}
+
+variable "enable_tailscale_ssh" {
+  type        = bool
+  default     = false
   description = "Whether to enable ssh-over-tailscale for tailscale network nodes."
 }
 
