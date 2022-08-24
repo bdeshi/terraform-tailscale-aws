@@ -17,7 +17,17 @@ variable "tailscale_api_key" {
   description = "The tailscale API key to use."
   validation {
     condition     = can(regex("^tskey-", var.tailscale_api_key))
-    error_message = "The tailscale API key must start with `tskey-`"
+    error_message = "The tailscale API key must start with `tskey-`."
+  }
+}
+
+variable "relay_node_name" {
+  type        = string
+  default     = "tailscale-relay"
+  description = "The name of the relay node in tailscale network."
+  validation {
+    condition     = can(regex("^\\w+$", var.relay_node_name))
+    error_message = "tailscale node name must be alphanumeric."
   }
 }
 
@@ -40,7 +50,7 @@ variable "relay_instance_type" {
 variable "relay_key_name" {
   type        = string
   default     = "default"
-  description = "The name of the pre-existing key pair to use for ssh access to the relay server."
+  description = "Name of key pair to use for the relay server, or empty to disable ssh access."
 }
 
 variable "aws_region" {

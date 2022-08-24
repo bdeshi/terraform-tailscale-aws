@@ -17,9 +17,10 @@ resource "aws_instance" "tailscale" {
   subnet_id                   = var.subnet_id
   vpc_security_group_ids      = [aws_security_group.tailscale.id]
   user_data = templatefile("${path.module}/files/relay-init.sh.tftpl", {
-    routes   = local.tailscale_routes
-    auth_key = tailscale_tailnet_key.relay_auth.key
+    routes    = local.tailscale_routes
+    auth_key  = tailscale_tailnet_key.relay_auth.key
     exit_node = var.advertise_exit_node
+    node_name = var.relay_node_name
   })
   tags = {
     Name = "tailscale"
